@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<form action="http://localhost:2403/yinhu" method="post" target="_blank">
+			账户：<input type="text" name="name"/><br />
+			密码：<input type="text" name="age"/><br />	
+			<input type="submit" value="登录" id="submit1"/>		
+		</form>
+		
+	<script>
+	//处理 浏览器兼容
+	function createXHR(){
+	if (typeof XMLHttpRequest != "undefined"){
+	return new XMLHttpRequest();
+	} else if (typeof ActiveXObject != "undefined"){
+	if (typeof arguments.callee.activeXString != "string"){
+	var versions = [ "MSXML2.XMLHttp.6.0", "MSXML2.XMLHttp.3.0",
+	"MSXML2.XMLHttp"],
+	i, len;
+	for (i=0,len=versions.length; i < len; i++){
+	try {
+	new ActiveXObject(versions[i]);
+	arguments.callee.activeXString = versions[i];
+	break;
+	} catch (ex){
+	//跳过
+	}
+	}
+	}
+	return new ActiveXObject(arguments.callee.activeXString);
+	} else {
+	throw new Error("No XHR object available.");
+	}
+	}	
+	//ajax
+	var xhr = createXHR();
+	xhr.onreadystatechange =callBacka;
+	xhr.open("get", "http://localhost:2403/yinhu", true);
+	xhr.send(null);	
+    //回调函数
+    //JSON.stringify()和JSON.parse()方法
+	function callBacka(){
+	if (xhr.readyState == 4){
+	  if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+	  	//在这个里面处理获取的ajax数据
+	  	var data=JSON.parse(xhr.responseText);
+	  	//data 从服务器取来解析后的对象数组
+	  	
+	    
+	  } else {
+	    alert("Request was unsuccessful: " + xhr.status);
+	  }
+	}
+	};
+	var button1=document.getElementById("submit1");
+	  button1.onclick=function(){
+	  	setInterval(function(){
+	  		window.location.href="1原生ajax.html";
+	  	},1000)
+	  	
+	  }
+	  </script>
+	</body>
+</html>

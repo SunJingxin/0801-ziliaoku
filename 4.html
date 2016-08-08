@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+	<form action="http://localhost:2403/yinhu" method="post" id="form1">
+		账户：<input type="text" name="name"/><br />
+		密码：<input type="text" name="age"/><br />	
+		<input type="submit" value="登录" id="submit1"/>			
+	</form>	
+	<button id="button1">tijiao</button>
+   <script>
+	//处理 浏览器兼容
+	function createXHR(){
+	if (typeof XMLHttpRequest != "undefined"){
+	return new XMLHttpRequest();
+	} else if (typeof ActiveXObject != "undefined"){
+	if (typeof arguments.callee.activeXString != "string"){
+	var versions = [ "MSXML2.XMLHttp.6.0", "MSXML2.XMLHttp.3.0",
+	"MSXML2.XMLHttp"],
+	i, len;
+	for (i=0,len=versions.length; i < len; i++){
+	try {
+	new ActiveXObject(versions[i]);
+	arguments.callee.activeXString = versions[i];
+	break;
+	} catch (ex){
+	//跳过
+	}
+	}
+	}
+	return new ActiveXObject(arguments.callee.activeXString);
+	} else {
+	throw new Error("No XHR object available.");
+	}
+	}  	
+   	//
+   	var button1=document.getElementById("button1");
+   	button1.onclick=submitData;
+   	function submitData(){
+	var xhr = createXHR();
+	xhr.onreadystatechange = function(){
+	if (xhr.readyState == 4){
+	if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+	console.log(xhr.responseText);
+	} else {
+	alert("Request was unsuccessful: " + xhr.status);
+	}
+	}
+	};
+	xhr.open("post", "http://localhost:2403/yinhu", true);
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	var form = document.getElementById("form1");
+	xhr.send(serialize(form1));
+	}
+   	
+   	
+   </script>
+	</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+<script src="js/zepto.min.js"></script>
+	</head>
+	<body>
+	  <div class="wrapper"></div>
+	  <form action="http://localhost:2403/yinhu" method="post" id="savaReportForm" onsubmit="return PostData()">
+	  	账户：<input type="text" name="name"/><br />
+		密码：<input type="text" name="age"/><br />				
+	  	<input type="submit" value="点击提交表单"/>
+	  	<button type="reset">点击提交222</button>
+	  </form>
+	<script>
+	function PostData() {
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:2403/yinhu",
+            data:"dsds",
+            success: function(msg) {
+            }
+        });
+        return false;
+      }
+	</script>
+	</body>
+</html>

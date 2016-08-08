@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Document</title>
+</head>
+<body>
+	<!--http://localhost:2403/yinhu-->
+		<form  id="form1">
+		 <label for="userName">用户名:</label> <input type="text" name="name" id="userName"/><span id="formSpan1"></span><br />
+		 <label for="userAge">密   码:</label><input type="password" name="age" id="userAge"/><span id="formSpan2"></span><br />
+		 <input type="submit" value="登录" id="button1"/>
+		</form>
+</body>
+	<script>
+  var button1=document.getElementById('button1');
+  button1.onclick=function(e){
+	e.preventDefault();
+	xhr = createXHR();
+	xhr.onreadystatechange =callBacka;
+	xhr.open("post", "http://localhost:2403/yinhu", true);
+	xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+	var form1 = document.getElementById("form1");
+	console.log(serialize(form1))
+    xhr.send(serialize(form1));  
+ }
+	function callBacka(){
+	if (xhr.readyState == 4){
+	  if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+	  	//在这个里面处理获取的ajax数据
+	  	var data=JSON.parse(xhr.responseText);
+	  	//data 从服务器取来解析后的对象数组
+	  	if(data.name=="sun"&&data.age=="123"){
+	  	  window.location.href="2zeptoAjax.html"
+	  	}
+	  	else if(data.name!="sun"){
+	  	  var formSpan1=document.getElementById("formSpan1");
+	  	  formSpan1.innerHTML="用户名错误"
+	  	}
+//	  	else if(){
+//	  		
+//	  	}else if(){
+//	  		
+//	  	}
+	  	
+	  } else {
+	    alert("Request was unsuccessful: " + xhr.status);
+	  }
+	}
+	};
+	
+	
+	
+	
+//---------------------------------------------------------------------------------
+	//处理 浏览器兼容
+	function createXHR(){
+	  if (typeof XMLHttpRequest != "undefined"){
+	    return new XMLHttpRequest();
+	  } else if (typeof ActiveXObject != "undefined"){
+	    if (typeof arguments.callee.activeXString != "string"){
+	      var versions = [ "MSXML2.XMLHttp.6.0", "MSXML2.XMLHttp.3.0",
+	        "MSXML2.XMLHttp"],
+	         i, len;
+	    for (i=0,len=versions.length; i < len; i++){
+	      try {
+	        new ActiveXObject(versions[i]);
+	        arguments.callee.activeXString = versions[i];
+	        break;
+	      } catch (ex){
+	       //跳过
+	      }
+	    }
+	   }
+	  return new ActiveXObject(arguments.callee.activeXString);
+	  } else {
+	    throw new Error("No XHR object available.");
+	  }
+	}		
+	//序列化的函数
+	function serialize(form){
+	var parts = [],
+	field = null,
+	i,
+	len,
+	j,
+	optLen,
+	option,
+	optValue;
+	for (i=0, len=form.elements.length; i < len; i++){
+	field = form.elements[i];
+	switch(field.type){
+	case "select-one":
+	case "select-multiple":
+	if (field.name.length){
+	for (j=0, optLen = field.options.length; j < optLen; j++){
+		option = field.options[j];
+	if (option.selected){
+	optValue = "";
+	if (option.hasAttribute){
+	optValue = (option.hasAttribute("value") ?
+	option.value : option.text);
+	} else {
+	optValue = (option.attributes["value"].specified ?
+	option.value : option.text);
+	}
+	parts.push(encodeURIComponent(field.name) + "=" +
+	encodeURIComponent(optValue));
+	}
+	}
+	}
+	break;
+	case undefined: //字段集
+	case "file": //文件输入
+	case "submit": //提交按钮
+	case "reset": //重置按钮
+	case "button": //自定义按钮
+	break;
+	case "radio": //单选按钮
+	case "checkbox": //复选框
+	if (!field.checked){
+	break;
+	}
+	/* 执行默认操作 */
+	default:
+	//不包含没有名字的表单字段
+	if (field.name.length){
+	parts.push(encodeURIComponent(field.name) + "=" +
+	encodeURIComponent(field.value));
+	}
+	}
+	}
+	return parts.join("&");
+	}
+	  </script>
+</html>
+

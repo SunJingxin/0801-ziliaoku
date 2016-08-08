@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Document</title>
+</head>
+<body>
+    <form  id="form1">
+       <label for="userName">用户名:</label> <input type="text" name="name" id="userName"/><span id="formSpan1"></span><br />
+	   <label for="userAge">密   码:</label><input type="password" name="age" id="userAge"/><span id="formSpan2"></span><br />
+	   <input type="submit" value="登录" id="button1"/>
+	</form>	
+</body>
+<script>
+	//处理 浏览器兼容
+	function createXHR(){
+	  if (typeof XMLHttpRequest != "undefined"){
+	    return new XMLHttpRequest();
+	  } else if (typeof ActiveXObject != "undefined"){
+	    if (typeof arguments.callee.activeXString != "string"){
+	      var versions = [ "MSXML2.XMLHttp.6.0", "MSXML2.XMLHttp.3.0",
+	        "MSXML2.XMLHttp"],
+	         i, len;
+	    for (i=0,len=versions.length; i < len; i++){
+	      try {
+	        new ActiveXObject(versions[i]);
+	        arguments.callee.activeXString = versions[i];
+	        break;
+	      } catch (ex){
+	       //跳过
+	      }
+	    }
+	   }
+	  return new ActiveXObject(arguments.callee.activeXString);
+	  } else {
+	    throw new Error("No XHR object available.");
+	  }
+	}	
+	//ajax
+  var button1=document.getElementById('button1');
+   button1.onclick=function(e){
+	e.preventDefault();
+	xhr = createXHR();
+	xhr.onreadystatechange =callBacka;
+	xhr.open("GET", "http://localhost:2403/yinhu", true);
+    xhr.send(null);  
+   }
+	function callBacka(){
+	if (xhr.readyState == 4){
+	  if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304){
+	  	//在这个里面处理获取的ajax数据
+	  	var data=JSON.parse(xhr.responseText);
+	  	//data 从服务器取来解析后的对象数组
+	  	var userName=document.getElementById("userName").value
+	  	var userAge=document.getElementById("userAge").value
+	  	var formSpan1=document.getElementById("formSpan1");
+	  	var formSpan2=document.getElementById("formSpan2")
+	  	var biao=0;
+	  	for(var i=0;i<data.length;i++){
+	  	   if(data[i].name==userName){
+	  	   	 biao=1;
+	  	   	 if(data[i].age==userAge){
+	  	   	   window.location.href="https://www.baidu.com/";
+	  	   	   console.log("ok")
+	  	   	   
+	  	   	 }else {
+	  	   	   console.log("000000000")
+	  	   	   formSpan2.innerHTML="您输入的用户密码错误"
+	  	   	 }
+	  	   }  
+	  	}
+	  	if(biao==0){
+	  	  formSpan1.innerHTML="您输入的用户名错误"
+	  	  formSpan2.innerHTML="您输入的用户密码错误"
+	  	}	  
+	  } else {
+	    alert("Request was unsuccessful: " + xhr.status);
+	  }
+	}
+	};
+  var oinput=document.getElementsByTagName("input")
+      for(var i=0;i<oinput.length;i++){
+      	oinput[i].onfocus=function(){
+      	 formSpan1.innerHTML=""
+	  	 formSpan2.innerHTML=""      		
+      	}
+      }
+  
+	  </script>
+</html>
